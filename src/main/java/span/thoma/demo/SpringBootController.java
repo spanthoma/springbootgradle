@@ -28,6 +28,6 @@ public class SpringBootController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index() {
-        return "home";
+        return "index";
     }
 }
