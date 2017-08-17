@@ -1,6 +1,7 @@
 package span.thoma.demo;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +17,12 @@ public class SpringBootController {
 
     @ResponseBody
     @RequestMapping(value = "/test",  method = RequestMethod.GET)
+    @Cacheable(value = "BLOG:controller.test")
     public String test(Model model) {
         return "hello springboot gradle222";
     }
 
+    @Cacheable(value = "BLOG:controller.home")
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String home() {
         return "home";
