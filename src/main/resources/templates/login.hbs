@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{> common/header}}
+</head>
+<body>
+<div id="all">
+    <div class="container-fluid">
+        <div class="row row-offcanvas row-offcanvas-left">
+
+            {{> common/menu}}
+
+            <div id="all">
+
+                <div class="container-fluid">
+                    <div class="row row-offcanvas row-offcanvas-left">
+
+                        <p class="content-column">
+                        <h2></h2>
+                        </p>
+                        <div class="row content-column">
+                            <div class="content-column-content">
+                                <p class="social">
+                                    <a href="#" data-animate-hover="pulse" class="external facebook"><i
+                                            class="fa fa-facebook"></i></a>
+                                    <a href="#" data-animate-hover="pulse" class="external gplus"><i
+                                            class="fa fa-google-plus"></i></a>
+                                </p>
+                            </div>
+
+                            <form action="/login" method="post">
+                                <div class="content-column-content">
+                                    <div class="col-xs-4 col-md-4 text-center col-sm-4">
+                                        <div class="input-group margin-bottom-sm">
+                                            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"
+                                                                               aria-hidden="true"></i></span>
+                                            <input class="form-control" type="text" name="username"
+                                                   placeholder="Email address">
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-key fa-fw"
+                                                                               aria-hidden="true"></i></span>
+                                            <input class="form-control" type="password" name="password"
+                                                   placeholder="Password">
+                                        </div>
+                                        <div class="input-group">
+                                            <p></p>
+                                            <button type="submit" class="btn">Log in</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

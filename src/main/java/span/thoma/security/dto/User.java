@@ -1,18 +1,42 @@
 package span.thoma.security.dto;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * Created by admin on 2017-08-04.
  */
-public class User implements UserDetails {
 
-    private String username;
+
+public class User implements UserDetails, Serializable {
+
+    private static final long serialVersionUID = -1187084407725646139L;
+
+    @Email(message = "error.username.pattern")
+    @NotEmpty(message = "error.username.empty")
+    private String username;            // email
+
+    @Size(min = 8, message = "error.password.size")
+    @NotEmpty(message = "error.password.empty" )
     private String password;
-    private String name;
+
+    @NotEmpty(message = "error.confirmpassword.empty")
+    private String confirmPassword;
+
+    @NotEmpty(message = "error.name.empty")
+    private String name;                // nick
     private boolean isAccountNonExpired;
     private boolean isAccountNonLocked;
     private boolean isCredentialsNonExpired;
@@ -35,6 +59,14 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getName() {
@@ -88,5 +120,11 @@ public class User implements UserDetails {
 
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
+    }
+
+
+    @AssertTrue(message = "error.password.match")
+    public boolean isMatchConfirmPassword() {
+        return this.password.equals(confirmPassword);
     }
 }

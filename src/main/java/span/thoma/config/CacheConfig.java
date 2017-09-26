@@ -21,8 +21,8 @@ public class CacheConfig extends CachingConfigurerSupport {
     @Bean
     public JedisConnectionFactory redisConnectionFactory() {
         JedisConnectionFactory redisConnectionFactory = new JedisConnectionFactory();
-        redisConnectionFactory.setHostName("127.0.0.1");
-        redisConnectionFactory.setPort(6379);
+        redisConnectionFactory.setHostName("192.168.99.100");
+        redisConnectionFactory.setPort(32772);
         redisConnectionFactory.setUsePool(true);
         return redisConnectionFactory;
     }

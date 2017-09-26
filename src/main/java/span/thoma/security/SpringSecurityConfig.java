@@ -25,18 +25,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/static/**");
+        web.ignoring().antMatchers("/static/**", "/webjars/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/home").permitAll()
-                    .antMatchers("/test").hasRole("USER")
-                    .and()
+                    .antMatchers("/", "/home", "/register")
+                    .permitAll()
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                .and()
                 .formLogin()
-                    .permitAll();
+                    .loginPage("/login")
+                .permitAll();
     }
 
     @Override

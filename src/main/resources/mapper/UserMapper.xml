@@ -27,7 +27,7 @@
     </select>
 
     <insert id="createUser" parameterType="span.thoma.security.dto.User">
-        INSERT INTO user (username, password, name, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled)
+        INSERT INTO user (username, password, `name`, isAccountNonExpired, isAccountNonLocked, isCredentialsNonExpired, isEnabled)
         VALUES (#{username}, #{password}, #{name}, #{isAccountNonExpired}, #{isAccountNonLocked}, #{isCredentialsNonExpired}, #{isEnabled})
     </insert>
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {{> common/header}}
+</head>
+<body>
+<div id="all">
+    <div class="container-fluid">
+        <div class="row row-offcanvas row-offcanvas-left">
+
+            {{> common/menu}}
+
+            {{> (lookup . 'contentKey')}}
+
+        </div>
+    </div>
+</div>
+
+{{> common/javascript}}
+</body>
+</html>
