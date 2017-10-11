@@ -1,5 +1,6 @@
 package span.thoma.demo;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.annotation.Cacheable;
@@ -10,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import static span.thoma.common.Constants.CONTENT_KEY;
+import static span.thoma.common.Constants.COMMON_INDEX;
+
 /**
  * Created by spanthoma on 16. 12. 23..
  */
 
 @Controller
 public class SpringBootController {
-
-    private final String COMMON_INDEX = "common_index";
-    private final String CONTENT_KEY = "contentKey";
 
     @Autowired
     private HomeService homeService;

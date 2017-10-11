@@ -8,9 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import span.thoma.security.dto.User;
 import span.thoma.security.service.UserService;
@@ -30,18 +28,17 @@ public class SecurityController {
     @Autowired
     private ReloadableResourceBundleMessageSource messageSource;
 
-
-    @RequestMapping(value="/login", method = RequestMethod.GET)
+    @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    @GetMapping("/register")
     public String register() {
         return "register";
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @PostMapping("/register")
     public String register(ModelMap modelMap, @Valid User user, BindingResult bindingResult, SessionStatus sessionStatus) {
 
         if(bindingResult.hasErrors()) {

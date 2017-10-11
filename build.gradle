@@ -5,9 +5,11 @@ buildscript {
 	}
 	repositories {
 		mavenCentral()
+		maven { url 'http://repo.spring.io/plugins-release' }
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework.build.gradle:propdeps-plugin:0.0.7")
 	}
 }
 
@@ -25,20 +27,29 @@ targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	maven { url 'http://repo.spring.io/plugins-release' }
 }
 
+configure(allprojects) {
+	apply plugin: 'propdeps'
+	apply plugin: 'propdeps-maven'
+	apply plugin: 'propdeps-idea'
+	apply plugin: 'propdeps-eclipse'
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile("org.springframework.boot:spring-boot-starter-data-redis")
 	compile("org.springframework.boot:spring-boot-starter-jdbc")
+	compile("org.springframework.social:spring-social-facebook")
 
 	//compile("org.springframework.boot:spring-boot-starter-data-elasticsearch:1.5.6.RELEASE")
 
 
 	compile('org.webjars.bower:bootstrap:3.3.7')
 	compile('org.webjars.bower:jquery:3.2.1')
+	compile('org.webjars:ckeditor:4.7.3')
 
 	compile("javax.servlet:jstl")
 	compile("org.apache.tomcat.embed:tomcat-embed-jasper")
@@ -58,6 +69,9 @@ dependencies {
 	compile("com.github.jknack:handlebars-jackson2:${handlebarsVersion}")
 	compile("com.github.jknack:handlebars-humanize:${handlebarsVersion}")
 	compile("com.github.jknack:handlebars-markdown:${handlebarsVersion}")
+
+
+	provided("org.projectlombok:lombok:1.16.18")
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
