@@ -1,0 +1,99 @@
+package span.thoma.config;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.client.OAuth2ClientContext;
+import org.springframework.security.oauth2.client.OAuth2RestTemplate;
+import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
+import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.CompositeFilter;
+
+import javax.servlet.Filter;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by admin on 2017-10-11.
+ */
+
+public class SocialConfig extends WebSecurityConfigurerAdapter{
+
+    @Autowired
+    OAuth2ClientContext oAuth2ClientContext;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .antMatcher("/login**")
+                .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
+    }
+
+    @Bean
+    public Filter ssoFilter() {
+        CompositeFilter filter = new CompositeFilter();
+        List<Filter> filters = new ArrayList<>();
+        filters.add(getFacebookFilter());
+        filters.add(getGithubFilter());
+        filter.setFilters(filters);
+        return filter;
+    }
+
+    @Bean
+    @ConfigurationProperties("facebook.client")
+    public AuthorizationCodeResourceDetails facebook() {
+        return new AuthorizationCodeResourceDetails();
+    }
+
+    @Bean
+    @ConfigurationProperties("facebook.resource")
+    public ResourceServerProperties facebookResource() {
+        return new ResourceServerProperties();
+    }
+
+
+
+    @Bean
+    @ConfigurationProperties("github.client")
+    public AuthorizationCodeResourceDetails github() {
+        return new AuthorizationCodeResourceDetails();
+    }
+
+    @Bean
+    @ConfigurationProperties("github.resource")
+    public ResourceServerProperties githubResource() {
+        return new ResourceServerProperties();
+    }
+
+
+    private OAuth2ClientAuthenticationProcessingFilter getFacebookFilter() {
+        return getOAuthFIlter(facebook(), facebookResource(), "/login/facebook");
+    }
+
+    private OAuth2ClientAuthenticationProcessingFilter getGithubFilter() {
+        return getOAuthFIlter(github(), githubResource(), "/login/github");
+    }
+
+
+    private OAuth2ClientAuthenticationProcessingFilter getOAuthFIlter(AuthorizationCodeResourceDetails details, ResourceServerProperties resource, String url) {
+        OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(url);
+        OAuth2RestTemplate template = new OAuth2RestTemplate(details,  oAuth2ClientContext);
+        filter.setRestTemplate(template);
+        UserInfoTokenServices tokenServices = new UserInfoTokenServices(resource.getUserInfoUri(), details.getClientId());
+        tokenServices.setRestTemplate(template);
+        filter.setTokenServices(tokenServices);
+        return filter;
+    }
+
+}
