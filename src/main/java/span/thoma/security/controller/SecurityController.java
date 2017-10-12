@@ -14,6 +14,7 @@ import span.thoma.security.dto.User;
 import span.thoma.security.service.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 /**
  * Created by admin on 2017-09-11.
@@ -31,6 +32,11 @@ public class SecurityController {
     @GetMapping("/login")
     public String login() {
         return "login";
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public Principal getUser(Principal principal) {
+        return principal;
     }
 
     @GetMapping("/register")
