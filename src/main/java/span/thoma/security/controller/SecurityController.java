@@ -29,6 +29,11 @@ public class SecurityController {
     @Autowired
     private ReloadableResourceBundleMessageSource messageSource;
 
+    @GetMapping("/login/facebook")
+    public String facebook() {
+        return "redirect:/home";
+    }
+
     @GetMapping("/login")
     public String login() {
         return "login";
