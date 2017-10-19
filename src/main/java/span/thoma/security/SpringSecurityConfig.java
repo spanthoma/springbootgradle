@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceS
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -38,28 +39,29 @@ import java.util.List;
 @EnableOAuth2Client
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 
-
     @Autowired
     private UserService userService;
 
     @Autowired
-    private OAuth2ClientContext oAuth2ClientContext;
+    private ApplicationContext context;
+
 
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/js/**", "/css/**", "/img/**", "/fonts/**", "/webjars/**");
+        web.ignoring().antMatchers("/favicon.ico", "/js/**", "/css/**", "/img/**", "/fonts/**", "/webjars/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
                 .authorizeRequests()
                     .antMatchers("/", "/home", "/register", "/login/**")
-                    .permitAll()
-                    .antMatchers("/**").authenticated()
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                .and()
+                    .permitAll().and()
+                .authorizeRequests()
+                    .antMatchers("/admin/**").hasRole("ADMIN").and()
+                .authorizeRequests()
+                    .anyRequest().hasAnyRole("USER", "OAUTH").and()
                 .formLogin()
                     .loginPage("/login")
                 .and()
@@ -67,54 +69,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
                         .deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/home")
                         .permitAll()
-                .and().addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
+                .and().addFilterBefore((Filter)context.getBean("sso.filter") , BasicAuthenticationFilter.class);
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(userService.passwordEncoder());
     }
-    private Filter ssoFilter() {
-        CompositeFilter filter = new CompositeFilter();
-        List<Filter> filters = new ArrayList<>();
-        filters.add(getOAuthFIlter(facebook(), facebookResource(), "/login/facebook"));
-        filter.setFilters(filters);
-        return filter;
-    }
 
-    @Bean
-    @ConfigurationProperties("facebook.client")
-    public AuthorizationCodeResourceDetails facebook() {
-        return new AuthorizationCodeResourceDetails();
-    }
 
-    @Bean
-    @ConfigurationProperties("facebook.resource")
-    public ResourceServerProperties facebookResource() {
-        return new ResourceServerProperties();
-    }
-
-    private OAuth2ClientAuthenticationProcessingFilter getOAuthFIlter(AuthorizationCodeResourceDetails details, ResourceServerProperties resource, String url) {
-
-        System.out.println("----------------------------------");
-        System.out.println(details.getAccessTokenUri());
-        System.out.println("----------------------------------");
-        System.out.println(resource.getClientId());
-        OAuth2ClientAuthenticationProcessingFilter filter = new OAuth2ClientAuthenticationProcessingFilter(url);
-        OAuth2RestTemplate template = new OAuth2RestTemplate(details,  oAuth2ClientContext);
-        filter.setRestTemplate(template);
-        UserInfoTokenServices tokenServices = new UserInfoTokenServices(resource.getUserInfoUri(), details.getClientId());
-
-        //tokenServices.setRestTemplate(template);
-        filter.setTokenServices(tokenServices);
-        return filter;
-    }
-
-    @Bean
-    public FilterRegistrationBean oauth2ClientFilterRegistration(OAuth2ClientContextFilter filter) {
-        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
-        registrationBean.setFilter(filter);
-        registrationBean.setOrder(-100);
-        return registrationBean;
-    }
 }

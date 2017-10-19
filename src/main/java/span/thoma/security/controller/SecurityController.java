@@ -53,9 +53,13 @@ public class SecurityController {
     public String register(ModelMap modelMap, @Valid User user, BindingResult bindingResult, SessionStatus sessionStatus) {
 
         if(bindingResult.hasErrors()) {
-            bindingResult.getFieldErrors().forEach(e -> {
+            /*bindingResult.getFieldErrors().forEach(e -> {
                 modelMap.put(e.getField(), messageSource.getMessage(e.getDefaultMessage(), null, LocaleContextHolder.getLocale()));
-            });
+            });*/
+
+            for(FieldError error : bindingResult.getFieldErrors()) {
+                modelMap.put(error.getField(), messageSource.getMessage(error.getDefaultMessage(), null, LocaleContextHolder.getLocale()));
+            }
 
             return "register";
         } else {
