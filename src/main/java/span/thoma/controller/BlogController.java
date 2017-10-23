@@ -27,14 +27,15 @@ public class BlogController {
 
     @GetMapping("/write")
     public String write(ModelMap modelMap) {
-        return "/writeForm";
+        modelMap.put(CONTENT_KEY, "/blog/writeForm");
+        return COMMON_INDEX;
     }
 
     @PostMapping("/write")
     public String write(ModelMap modelMap, @Valid Blog blog) {
         blog.setAuthor(getAuthor());
 
-        return "redirect:/list";
+        return "redirect:/blog/list";
     }
 
     private Author getAuthor() {
