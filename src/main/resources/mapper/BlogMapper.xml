@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="span.thoma.repository.BlogMapper">
+<mapper namespace="span.thoma.repository.BlogRepository">
 
-    <resultMap id="blogResultMap" type="span.thoma.model.Blog">
-        <result column="" property=""></result>
+    <resultMap id="blogResultMap" type="Blog">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="categoryId" property="category.id"/>
+        <result column="author" property="author.username"/>
     </resultMap>
 
-    <select id="blogs" resultMap="blogResultMap"  >
+    <select id="find" resultMap="blogResultMap" >
       SELECT id
               , categoryId
               , title
               , content
               , author
-              , createDate
       FROM
           BLOG
-      <where>
-
-      </where>
-
     </select>
+
+
+    <insert id="save" parameterType="Blog" keyColumn="id">
+        <selectKey keyColumn="id" keyProperty="id" resultType="int" order="AFTER"/>
+        INSERT INTO Blog (categoryId, title, content, author)
+        VALUES (#{category.id}, #{title}, #{content}, #{author.username})
+    </insert>
 
 </mapper>
 

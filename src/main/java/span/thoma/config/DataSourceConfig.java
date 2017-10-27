@@ -31,7 +31,7 @@ public class DataSourceConfig {
     public SqlSessionFactory SqlSessionFactory(DataSource dataSource, ApplicationContext applicationContext) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
-        sqlSessionFactoryBean.setTypeAliasesPackage("span.thoma.dto");
+        sqlSessionFactoryBean.setTypeAliasesPackage("span.thoma.model");
         sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/*.xml"));
         return sqlSessionFactoryBean.getObject();
     }

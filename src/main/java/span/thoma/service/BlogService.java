@@ -11,5 +11,5 @@ public interface BlogService {
 
     List<Blog> list();
 
-    void write(Blog blog);
+    int write(Blog blog);
 }
