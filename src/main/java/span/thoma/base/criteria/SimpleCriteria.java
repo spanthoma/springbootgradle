@@ -1,6 +1,9 @@
 package span.thoma.base.criteria;
 
+import span.thoma.base.model.OrderBy;
+
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,8 +13,9 @@ import java.util.Set;
 public class SimpleCriteria implements Criteria {
 
     private Map<String, Object> param = new HashMap<>();
-    private Map<String, Object> order = new HashMap<>();
-    private Map<String, Object> sort = new HashMap<>();
+
+    private Map<String, OrderBy> sort = new LinkedHashMap<>();
+
 
     private SimpleCriteria(){}
 
@@ -19,27 +23,21 @@ public class SimpleCriteria implements Criteria {
         return new SimpleCriteria();
     }
 
+    public Criteria add(String key, Object value) {
+        this.param.put(key, value);
+        return this;
+    }
+
+    public Criteria sort(String field, OrderBy orderBy) {
+        this.sort.put(field, orderBy);
+        return this;
+    }
+
     public Map<String, Object> getParam() {
         return param;
     }
 
-    public void setParam(Map<String, Object> param) {
-        this.param = param;
-    }
-
-    public Map<String, Object> getOrder() {
-        return order;
-    }
-
-    public void setOrder(Map<String, Object> order) {
-        this.order = order;
-    }
-
-    public Map<String, Object> getSort() {
+    public Map<String, OrderBy> getSort() {
         return sort;
-    }
-
-    public void setSort(Map<String, Object> sort) {
-        this.sort = sort;
     }
 }
