@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import span.thoma.demo.HomeService;
 
-import static span.thoma.common.Constants.CONTENT_KEY;
+import static span.thoma.common.Constants.TEMPLATE_KEY;
 import static span.thoma.common.Constants.COMMON_INDEX;
 
 /**
@@ -49,12 +49,10 @@ public class HomeController {
 
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     public String home(ModelMap modelMap) {
-        modelMap.put(CONTENT_KEY, "index");
+        modelMap.put(TEMPLATE_KEY, "index");
         homeService.getHome();
         return COMMON_INDEX;
     }
-
-
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(ModelMap modelMap) {

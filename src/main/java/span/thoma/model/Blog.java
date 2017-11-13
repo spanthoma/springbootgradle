@@ -1,6 +1,8 @@
 package span.thoma.model;
 
-import lombok.*;
+
+import lombok.Data;
+import lombok.NonNull;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.TypeAlias;
 

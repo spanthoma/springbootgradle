@@ -1,5 +1,7 @@
 package span.thoma.service;
 
+import span.thoma.base.criteria.Criteria;
+import span.thoma.dto.BlogContent;
 import span.thoma.model.Blog;
 
 import java.util.List;
@@ -9,7 +11,8 @@ import java.util.List;
  */
 public interface BlogService {
 
-    List<Blog> list();
+    Blog findOne(long blogId);
+    BlogContent list(Criteria criteria);
 
     int write(Blog blog);
 }

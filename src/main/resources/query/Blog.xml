@@ -11,20 +11,22 @@
         <result column="author" property="author.username"/>
     </resultMap>
 
-    <select id="find" resultMap="blogResultMap" >
+    <select id="find" resultMap="blogResultMap" parameterType="criteria" >
+      <include refid="page.prefix" />
       SELECT id
               , categoryId
               , title
               , content
               , author
       FROM
-          BLOG
+          blog
+      <include refid="page.postfix" />
     </select>
 
 
     <insert id="save" parameterType="Blog" keyColumn="id">
         <selectKey keyColumn="id" keyProperty="id" resultType="int" order="AFTER"/>
-        INSERT INTO Blog (categoryId, title, content, author)
+        INSERT INTO blog (categoryId, title, content, author)
         VALUES (#{category.id}, #{title}, #{content}, #{author.username})
     </insert>
 

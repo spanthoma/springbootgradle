@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -17,7 +18,7 @@ import javax.sql.DataSource;
  * Created by admin on 2017-08-04.
  */
 @Configuration
-@MapperScan(basePackages = "span.thoma.repository")
+@MapperScan(basePackages = {"span.thoma.repository", "span.thoma.security.repository"})
 @EnableTransactionManagement
 public class DataSourceConfig {
 
@@ -31,8 +32,9 @@ public class DataSourceConfig {
     public SqlSessionFactory SqlSessionFactory(DataSource dataSource, ApplicationContext applicationContext) throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
-        sqlSessionFactoryBean.setTypeAliasesPackage("span.thoma.model");
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/*.xml"));
+        sqlSessionFactoryBean.setTypeAliasesPackage("span.thoma.model,span.thoma.base.model");
+        sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:sqlmap-config.xml"));
+        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:query/*.xml"));
         return sqlSessionFactoryBean.getObject();
     }
 

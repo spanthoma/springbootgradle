@@ -1,7 +1,6 @@
 package span.thoma.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import span.thoma.repository.UserMapper;
+import span.thoma.security.repository.UserRepository;
 import span.thoma.security.dto.User;
 
 import java.util.ArrayList;
@@ -23,14 +22,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserRepository userRepository;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     @Override
     public Collection<GrantedAuthority> getAuthorities(String username) {
-        List<String> autoritieStrings = userMapper.readAuthority(username);
+        List<String> autoritieStrings = userRepository.readAuthority(username);
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for(String authority : autoritieStrings) {
             authorities.add(new SimpleGrantedAuthority(authority));
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userMapper.readUser(username);
+        User user = userRepository.readUser(username);
         user.setAuthorities(getAuthorities(username));
         return user;
     }
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User readUser(String username) {
-        User user = userMapper.readUser(username);
+        User user = userRepository.readUser(username);
         user.setAuthorities(getAuthorities(username));
         return user;
     }
@@ -58,14 +57,14 @@ public class UserServiceImpl implements UserService {
         String password = user.getPassword();
         String encodedPassword  = new BCryptPasswordEncoder().encode(password);
         user.setPassword(encodedPassword);
-        userMapper.createUser(user);
-        userMapper.createAuthority(user);
+        userRepository.createUser(user);
+        userRepository.createAuthority(user);
     }
 
     @Override
     public void deleteUser(String username) {
-        userMapper.deleteUser(username);
-        userMapper.deleteAuthority(username);
+        userRepository.deleteUser(username);
+        userRepository.deleteAuthority(username);
     }
 
     @Override

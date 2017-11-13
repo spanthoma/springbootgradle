@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="page">
+
+    <sql id="prefix">
+        <if test="pageItemSize > 0">
+        SELECT *
+        FROM (
+                SELECT X.*
+                        , ROWNUM AS RNUM
+                        , FLOOR((ROWNUM - 1) / #{pageItemSize} + 1) AS PAGE
+                        , COUNT(*) OVER () AS TOTCNT
+                FROM (
+        </if>
+    </sql>
+
+
+    <sql id="postfix">
+        <if test="pageItemSize > 0">
+                ) X
+         )
+         WHERE PAGE = #{pageNumber}
+        </if>
+    </sql>
+
+
+</mapper>

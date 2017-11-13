@@ -49,12 +49,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/favicon.ico", "/js/**", "/css/**", "/img/**", "/fonts/**", "/webjars/**");
+        web.ignoring().antMatchers("/favicon.ico", "/**/js/**", "/**/css/**", "/**/img/**", "/**/fonts/**", "/webjars/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                     .antMatchers("/", "/home", "/register", "/login/**")
                     .permitAll().and()
