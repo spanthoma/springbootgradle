@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import span.thoma.security.dto.User;
@@ -39,7 +38,7 @@ public class SecurityController {
         return "login";
     }
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    @RequestMapping(value = "/template/user", method = RequestMethod.GET)
     public Principal getUser(Principal principal) {
         return principal;
     }

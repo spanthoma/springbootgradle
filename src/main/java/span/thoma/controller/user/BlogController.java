@@ -1,7 +1,7 @@
-package span.thoma.controller;
+package span.thoma.controller.user;
 
 import static span.thoma.common.Constants.TEMPLATE_KEY;
-import static span.thoma.common.Constants.COMMON_INDEX;
+import static span.thoma.common.Constants.USER_COMMON_INDEX;
 import static span.thoma.common.Constants.CONTENT_KEY;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,7 @@ import javax.validation.Valid;
  * Created by admin on 2017-09-28.
  */
 @Controller
+@RequestMapping("/user/blog")
 public class BlogController {
 
     @Autowired
@@ -32,21 +33,21 @@ public class BlogController {
 
     @GetMapping("/list")
     public String list(ModelMap modelMap, SimpleCriteria criteria) {
-        modelMap.put(TEMPLATE_KEY,"/blog/list");
+        modelMap.put(TEMPLATE_KEY, "/user/blog/list");
         modelMap.put(CONTENT_KEY, blogService.list(criteria));
-        return COMMON_INDEX;
+        return USER_COMMON_INDEX;
     }
 
     @GetMapping("/write")
     public String write(ModelMap modelMap) {
-        modelMap.put(TEMPLATE_KEY, "/blog/writeForm");
-        return COMMON_INDEX;
+        modelMap.put(TEMPLATE_KEY, "/user/blog/writeForm");
+        return USER_COMMON_INDEX;
     }
 
     @PostMapping("/write")
     public String write(ModelMap modelMap, @Valid Blog blog) {
         blog.setAuthor(getAuthor());
-        return "redirect:/blog/list";
+        return "redirect:/user/blog/list";
     }
 
     private Author getAuthor() {

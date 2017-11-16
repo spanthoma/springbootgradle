@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceS
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
@@ -29,6 +30,11 @@ public class SocialConfig {
 
     @Autowired
     OAuth2ClientContext oauth2Clientcontext;
+
+
+    @Autowired
+    private ApplicationContext context;
+
 
     @Bean
     @ConfigurationProperties("facebook.client")
@@ -67,13 +73,10 @@ public class SocialConfig {
     public Filter ssoFilter() {
         CompositeFilter filter = new CompositeFilter();
         List<Filter> filters = new ArrayList<>();
-
-
         OAuth2ClientAuthenticationProcessingFilter facebook = new OAuth2ClientAuthenticationProcessingFilter("/login/facebook");
         facebook.setRestTemplate(new OAuth2RestTemplate(facebook(), oauth2Clientcontext));
         facebook.setTokenServices(new UserInfoTokenServices(facebookResource().getUserInfoUri(), facebook().getClientId()));
         filters.add(facebook);
-
         filter.setFilters(filters);
         return filter;
     }

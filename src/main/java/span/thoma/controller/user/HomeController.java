@@ -1,4 +1,4 @@
-package span.thoma.controller;
+package span.thoma.controller.user;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
